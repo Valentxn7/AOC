@@ -2,12 +2,19 @@
 
 Ce dépôt permet de valider automatiquement vos solutions pour les défis **Advent of Code** demandés dans les TPs.
 
+[lien vers ce sujet](https://gibson.telecomnancy.univ-lorraine.fr/projets/2526/aoc/aoc/template/sujet) (si remis à jour) 
+
 ## Fonctionnement
 
 Chaque fois que vous poussez votre code sur GitLab, un pipeline CI/CD se déclenche automatiquement pour :
 - Tester vos solutions Python et/ou Go
 - Vérifier que vos résultats correspondent aux sorties attendues
 - Générer des statistiques de complétion détaillée pour les enseignants
+
+## Important
+
+N'uploadez et ne partagez jamais vos inputs AOC ! (vous pouvez faire un .gitignore pour vous en assurer !)
+Les .gitkeep sont uniquement là pour vous fournir l'arborescence initiale, vous pouvez les supprimer une fois vos solutions ajoutées.
 
 ## Structure du dépôt
 
@@ -118,7 +125,8 @@ git push
 
 ## Jours requis pour les TPs
 
-Le pipeline testera automatiquement les jours demandés dans les TPs. Vous pouvez également ajouter d'autres jours si vous souhaitez valider vos solutions supplémentaires !
+Le pipeline testera automatiquement les jours demandés dans les TPs. Vous pouvez également ajouter d'autres jours si vous le souhaitez ! 
+Les validations de jours supplémentaires(y compris des années précédentes) seront ajoutés au fur et à mesure.
 
 ## Points importants
 
