@@ -7,7 +7,6 @@ Ce dépôt permet de valider automatiquement vos solutions pour les défis **Adv
 Chaque fois que vous poussez votre code sur GitLab, un pipeline CI/CD se déclenche automatiquement pour :
 - Tester vos solutions Python et/ou Go
 - Vérifier que vos résultats correspondent aux sorties attendues
-- Vérifier l'éfficacité de vos solutions
 - Générer des statistiques de complétion détaillée pour les enseignants
 
 ## Structure du dépôt
@@ -35,6 +34,11 @@ Organisez votre code selon la structure suivante :
     solution1.py
     solution2.py
 ```
+
+Pour vous aider à développer un code utilisable pour les 2 parties, si le fichier `solution1.py` ou `solution1.go` n'est pas présent mais que `solution2.py` ou `solution2.go` existe, le pipeline utilisera automatiquement le fichier `solution2` pour tester les deux parties :
+- La **première ligne** de la sortie sera utilisée comme résultat pour la partie **2**
+- La **deuxième ligne** de la sortie sera utilisée comme résultat pour la partie **1**
+
 
 ## Utilisation
 
@@ -140,6 +144,8 @@ Le pipeline testera automatiquement les jours demandés dans les TPs. Vous pouve
 ### Mon fichier n'est pas testé
 - Vérifiez la structure des dossiers et le nom des fichiers
 - Le fichier doit exister dans le chemin exact : `<année>/day<jour>/solution<partie>.<extension>`
+
+Veillez à ce que votre script affiche bien les deux résultats sur deux lignes distinctes dans ce cas !
 
 
 Bon courage pour vos défis Advent of Code !
