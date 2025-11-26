@@ -31,7 +31,7 @@ def solve(input_file):
 
         somme += first_g * occurrence
         liste_gauche.remove(first_g)
-    return result
+    return somme
 
 if __name__ == "__main__":
     result = solve(sys.argv[1])
