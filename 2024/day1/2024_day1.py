@@ -2,7 +2,7 @@ liste_gauche = list()
 liste_droit = list()
 
 # on upload tout le ficher
-with open("2024_day1_data", "r", encoding="utf-8") as f:
+with open(input_file, 'r') as f:
     for ligne in f:
         print(f"Ligne entière : {ligne=}")
         ligne = ligne[:-1]
