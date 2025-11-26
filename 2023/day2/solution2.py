@@ -12,24 +12,24 @@ def solve(input_file):
     sum_power = 0
     with open(input_file, 'r') as f:
         for ligne in f:
-            print(f"Ligne entière : {ligne=}")
+            #print(f"Ligne entière : {ligne=}")
             ligne = ligne[:-1]
-            print(f"Ligne traitée : {ligne=}")
+            #print(f"Ligne traitée : {ligne=}")
             # on sépare Game X au reste des données
             datas = ligne.split(":")
 
             data_gauche = datas[0]  # Game X
             data_droite = datas[1][1:]  # tout les jeux séparé par ;
 
-            print(f"{data_gauche=}, {data_droite=}")
+            #print(f"{data_gauche=}, {data_droite=}")
 
             data_droite_separee = data_droite.split(";")
 
-            print(f'{data_droite_separee=}')
+            #print(f'{data_droite_separee=}')
             for i in range(0, len(data_droite_separee)):
                 data_droite_separee[i] = data_droite_separee[i].strip()
 
-            print(f'data_droite_separee_stripped={data_droite_separee}')
+            #print(f'data_droite_separee_stripped={data_droite_separee}')
 
             all_data_droite_prepared = []
 
@@ -39,7 +39,7 @@ def solve(input_file):
             max_b = 1
             for data_droite in data_droite_separee:
                 one = ["None", "None", "None"]  # R G B
-                print(f"{data_droite=}")
+                #print(f"{data_droite=}")
                 splitted = data_droite.split(",")
                 for elt in splitted:
                     if elt[-1] == "d":  # Red
@@ -56,16 +56,16 @@ def solve(input_file):
                             max_b = one[2]
                     all_data_droite_prepared.append(one)
 
-                print(f"{one=}")
+                #print(f"{one=}")
                 all_data_droite_prepared.append(one)
 
             donnee.append([data_gauche, all_data_droite_prepared])
             power_game = max_r * max_g * max_b
             sum_power = sum_power + power_game
-            print(f"ajouté au pouvoir: {power_game=}, {sum_power=}")
+            #print(f"ajouté au pouvoir: {power_game=}, {sum_power=}")
 
-        print(f"{donnee=}")
-        print(f"{sum_power=}")
+        #print(f"{donnee=}")
+        #print(f"{sum_power=}")
         return sum_power
 
 if __name__ == "__main__":

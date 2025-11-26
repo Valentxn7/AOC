@@ -7,15 +7,15 @@ def solve(input_file):
     # on upload tout le ficher
     with open(input_file, 'r') as f:
         for ligne in f:
-            print(f"Ligne entière : {ligne=}")
+            #print(f"Ligne entière : {ligne=}")
             ligne = ligne[:-1]
-            print(f"Ligne traitée : {ligne=}")
+            #print(f"Ligne traitée : {ligne=}")
             # on sépare la colonne de gauche et de droite, chacune dans sa liste respective
             datas = ligne.split("   ")
             data_gauche = datas[0]
             data_droite = datas[1]
 
-            print(f"{data_gauche=}, {data_droite=}")
+            #print(f"{data_gauche=}, {data_droite=}")
 
             liste_gauche.append(int(data_gauche))
             liste_droit.append(int(data_droite))
