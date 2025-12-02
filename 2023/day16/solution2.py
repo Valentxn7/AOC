@@ -242,7 +242,7 @@ def solve(input_file):
             if score[2] > score_max:
                 score_max = score[2]
             if score[2] > 1000:
-                print(f"gros score, {score=}")
+                verbose2 and print(f"gros score, {score=}")
 
         return score_max
 
