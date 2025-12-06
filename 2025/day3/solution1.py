@@ -12,8 +12,8 @@ def add_to_result(data, verbose=False, message: str = None):
 def solve(input_file):
     # on upload tout le ficher
     with open(input_file, 'r') as f:
-        verbose = True
-        verbose_vict = True
+        verbose = False
+        verbose_vict = False
         for ligne in f:
             if ligne == "":  # derniere ligne vide
                 continue
@@ -26,7 +26,7 @@ def solve(input_file):
             max1_index = ligne.index(max1)
             max2 = max(ligne[max1_index + 1:])
             concatenation = max1 + max2
-            print(f"{max1=}, {max2=} {concatenation=}")
+            verbose and print(f"{max1=}, {max2=} {concatenation=}")
 
             add_to_result(int(concatenation))
         return sum_joltage

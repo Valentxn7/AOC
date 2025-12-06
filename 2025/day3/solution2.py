@@ -12,8 +12,8 @@ def add_to_result(data, verbose=False, message: str = None):
 def solve(input_file):
     # on upload tout le ficher
     with open(input_file, 'r') as f:
-        verbose = True
-        verbose_vict = True
+        verbose = False
+        verbose_vict = False
         for ligne in f:
             if ligne == "":  # derniere ligne vide
                 continue
