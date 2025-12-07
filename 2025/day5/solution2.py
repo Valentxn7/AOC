@@ -1,7 +1,7 @@
 import sys
 import gc
 
-all_verbose = True
+all_verbose = False
 verbose = all_verbose or False
 verbose_vict = all_verbose or False
 
@@ -110,7 +110,7 @@ def solve2():
         somme_fresh += len_intervalle
 
     if merge:
-        range_long = len(merge) + 1
+        range_long = len(merge)
         verbose_vict and print(f"Final: adding {range_long} by merge")
         somme_fresh += range_long
         merge = None
