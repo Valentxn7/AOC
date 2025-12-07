@@ -8,6 +8,7 @@ verbose_vict = all_verbose or False
 list_fresh: list[range] = list()  # pour éviter les doublons
 somme_fresh = 0
 
+
 def solve2():
     global somme_fresh, verbose, verbose_vict
     list_fresh.sort(key=lambda r: (r.start, r.stop))
@@ -19,7 +20,6 @@ def solve2():
         range2: range = list_fresh[x + 1]
         verbose and print(f"{range1=}, {range2=}")
         verbose and print(f"{range1.start=}, {range1.stop=} -- {range2.start=}, {range2.stop=}")
-        already_merge = False
         if merge:
             verbose and print("testing collision with merge...")
             if merge.stop >= range1.start:
@@ -29,14 +29,14 @@ def solve2():
                 range_fin = max(merge.stop, range1.stop)
                 merge = range(range_deb, range_fin)
                 verbose and print(f"{merge=}")
-                already_merge = True
+                continue
             else:
                 verbose and print("NO collision with merge, liberating merge...")
                 range_long = len(merge) + 1
                 verbose_vict and print(f"-- adding {range_long} by merge")
                 somme_fresh += range_long
                 merge = None
-        if not already_merge and range1.stop >= range2.start:  # S'il y a une collision entre les 2 ensemble
+        if range1.stop >= range2.start:  # S'il y a une collision entre les 2 ensemble
             verbose and print("merge")
             if merge:
                 verbose and print("Already a existing merge")
@@ -52,18 +52,17 @@ def solve2():
                 merge = range(range_deb, range_fin)
             verbose and print(f"{merge=}")
         else:
-            verbose and not already_merge and print("no merge")
+            verbose and print("no merge")
             # on vide le buffer range si il a été remplit par des ensembles avec collision avant
-            if not already_merge and merge:
+            if merge:
                 range_long = len(merge) + 1
                 verbose_vict and print(f"-- adding {range_long} by merge")
                 somme_fresh += range_long
                 merge = None
-            if not already_merge:
-                verbose and print(f"intervalle without collision: {range1}, {range1.start=}, {range1.stop=}")
-                len_intervalle = (range1.stop - range1.start) + 1
-                verbose_vict and print(f"-- adding {len_intervalle} by intervalle")
-                somme_fresh += len_intervalle
+            verbose and print(f"intervalle without collision: {range1}, {range1.start=}, {range1.stop=}")
+            len_intervalle = (range1.stop - range1.start) + 1
+            verbose_vict and print(f"-- adding {len_intervalle} by intervalle")
+            somme_fresh += len_intervalle
     if merge:
         range_long = len(merge) + 1
         verbose_vict and print(f"Final: adding {range_long} by merge")
@@ -71,6 +70,7 @@ def solve2():
         merge = None
 
     return somme_fresh
+
 
 def solve(input_file):
     # on upload tout le ficher
