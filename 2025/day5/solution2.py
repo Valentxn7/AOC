@@ -1,7 +1,7 @@
 import sys
 import gc
 
-all_verbose = False
+all_verbose = True
 verbose = all_verbose or False
 verbose_vict = all_verbose or False
 
@@ -63,6 +63,52 @@ def solve2():
             len_intervalle = (range1.stop - range1.start) + 1
             verbose_vict and print(f"-- adding {len_intervalle} by intervalle")
             somme_fresh += len_intervalle
+    verbose and print(f"before final {somme_fresh=}")
+    verbose and print("- - - Final - - -")
+    x = len(list_fresh) - 1
+    range1: range = list_fresh[x - 1]
+    range2: range = list_fresh[x]
+    verbose and print(f"{range1=}, {range2=}")
+    verbose and print(f"{range1.start=}, {range1.stop=} -- {range2.start=}, {range2.stop=}")
+    already_merge = False
+    if merge:
+        verbose and print("testing collision with merge...")
+        if merge.stop >= range2.start:
+            verbose and print("collision with merge.")
+            assert min(merge.start, range1.start, range2.start) == merge.start
+            range_deb = merge.start
+            range_fin = max(merge.stop, range2.stop)
+            merge = range(range_deb, range_fin)
+            verbose and print(f"{merge=}")
+            already_merge = True
+        else:
+            verbose and print("NO collision with merge, liberating merge...")
+            range_long = len(merge) + 1
+            verbose_vict and print(f"-- adding {range_long} by merge")
+            somme_fresh += range_long
+            merge = None
+    if not already_merge and range2.stop >= range1.start:  # S'il y a une collision entre les 2 ensemble
+        verbose and print("merge")
+        if merge:
+            verbose and print("Already a existing merge")
+            assert min(merge.start, range1.start, range2.start) == merge.start
+            range_deb = merge.start
+            range_fin = max(merge.stop, range1.stop, range2.stop)
+            merge = range(range_deb, range_fin)
+        else:
+            verbose and print("No existing merge")
+            assert min(range1.start, range2.start) == range1.start
+            range_deb = range1.start
+            range_fin = max(range1.stop, range2.stop)
+            merge = range(range_deb, range_fin)
+        verbose and print(f"{merge=}")
+    else:
+        verbose and not already_merge and print("no merge")
+        verbose and print(f"intervalle without collision: {range1}, {range1.start=}, {range1.stop=}")
+        len_intervalle = (range1.stop - range1.start) + 1
+        verbose_vict and print(f"-- adding {len_intervalle} by intervalle")
+        somme_fresh += len_intervalle
+
     if merge:
         range_long = len(merge) + 1
         verbose_vict and print(f"Final: adding {range_long} by merge")
