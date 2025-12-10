@@ -3,7 +3,7 @@ from functools import cache  # memoize integre a pyhton
 
 
 def solve(input_file):
-    verbose = True
+    verbose = False
     game: list[list[str]] = list()
     start: tuple[int, int] | None = None
 
