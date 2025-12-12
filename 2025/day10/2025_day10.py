@@ -6,6 +6,37 @@ def add_to_result(entire_data, added_data, verbose=False, message: str = None):
     entire_data += added_data
 
 
+def toogle_switch(inital_toogle: list[str], change_toogle: list[int]) -> list[str]:
+    for index_to_change in change_toogle:
+        if inital_toogle[index_to_change] == '#':
+            inital_toogle[index_to_change] = '.'
+        elif inital_toogle[index_to_change] == '.':
+            inital_toogle[index_to_change] = '#'
+        else:
+            raise ValueError(f"Error toogle_switch: {inital_toogle=}, {change_toogle=}")
+    return inital_toogle
+
+
+def plonger(inital_toogle_p: list[str], change_toogle_p: list[list[int]], objectif: str) -> int:
+    inital_toogle: list[str] = inital_toogle_p.copy()
+    change_toogle: list[list[int]] = change_toogle_p.copy()
+    print("plonger...")
+    print(f"{inital_toogle=}, {change_toogle=}, {objectif=}")
+    if not change_toogle:
+        return 0
+
+    if "".join(inital_toogle) == objectif:
+        return 1
+
+    inital_toogle = toogle_switch(inital_toogle, change_toogle.pop())
+
+    result = list()
+    for i in range(0, len(change_toogle)):
+        result.append(plonger(inital_toogle, change_toogle, objectif))
+
+    return min(result)
+
+
 with open("2025_day10_dataTEST", "r", encoding="utf-8") as f:
     verbose = True
     verbose_vict = True
@@ -57,24 +88,43 @@ with open("2025_day10_dataTEST", "r", encoding="utf-8") as f:
                 for btn_int in boutons_interessant:
                     verbose and print(f"comparing to {btn_int=}")
                     if one_swt in btn_int:
+                        if one_grp_button in boutons_linked:  # si déjà pris
+                            continue
                         boutons_linked.append(one_grp_button)
 
         verbose and print(f"{boutons_interessant=}")
         verbose and print(f"{boutons_linked=}")
 
+        all_boutons: list[list[int]] = boutons_interessant + boutons_linked
+        verbose and print(f"{all_boutons=}")
+
         # bruteforce
-        toogle = ['.' for _ in range(len(switchs))]
-        verbose and print(f"{toogle=}")
-        nb_change = 0
+        TOOGLE_EMPTY: list[str] = ['.' for _ in range(len(switchs))]
+        verbose and print(f"{TOOGLE_EMPTY=}")
+        best_nb_change: int = 99999999999999
+        nb_change: int = 0
 
-
-        @cache
-        def toogle_switch(inital_toogle: list[str], change_toogle: list[int]):
-            for index_to_change in change_toogle:
-                if inital_toogle[index_to_change] == '#':
-                    inital_toogle[index_to_change] = '.'
-                elif inital_toogle[index_to_change] == '.':
-                    inital_toogle[index_to_change] = '#'
-                else:
-                    raise ValueError(f"Error toogle_switch: {inital_toogle=}, {change_toogle=}")
-            return inital_toogle
+        print(f"{plonger(TOOGLE_EMPTY, all_boutons, switchs)=}")
+        for first in range(0, len(all_boutons)):
+            first = all_boutons[first]
+            best_nb_change = 1
+            toogle: list[str] = TOOGLE_EMPTY.copy()
+            print(f"{first=} {toogle=}, {switchs=}")
+            toogle = toogle_switch(inital_toogle=toogle, change_toogle=first)
+            print(f"{first=} {toogle=}, {switchs=}")
+            if toogle == switchs:
+                print("find")
+                if nb_change < best_nb_change:
+                    best_nb_change = nb_change
+            for second in range(0, len(all_boutons)):
+                if first == second:
+                    continue
+                second = all_boutons[second]
+                best_nb_change += 1
+                toogle = toogle_switch(toogle, second)
+                print(f"{second=} {toogle=}, {switchs=}")
+                if toogle == switchs:
+                    print("find")
+                    if nb_change < best_nb_change:
+                        best_nb_change = nb_change
+        print(f"{best_nb_change=}")
