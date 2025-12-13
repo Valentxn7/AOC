@@ -1,12 +1,12 @@
 from functools import cache
 
-
-def add_to_result(entire_data, added_data, verbose=False, message: str = None):
-    verbose and message and print(message)
-    entire_data += added_data
+nb_appel = 0
 
 
-def toogle_switch(inital_toogle: list[str], change_toogle: list[int]) -> list[str]:
+@cache
+def toogle_switch(inital_toogle_p: tuple[str, ...], change_toogle: tuple[int, ...]) -> tuple[str, ...]:
+    inital_toogle: list[str] = list(inital_toogle_p)
+
     for index_to_change in change_toogle:
         if inital_toogle[index_to_change] == '#':
             inital_toogle[index_to_change] = '.'
@@ -14,30 +14,49 @@ def toogle_switch(inital_toogle: list[str], change_toogle: list[int]) -> list[st
             inital_toogle[index_to_change] = '#'
         else:
             raise ValueError(f"Error toogle_switch: {inital_toogle=}, {change_toogle=}")
-    return inital_toogle
+    return tuple(inital_toogle)
 
-
-def plonger(inital_toogle_p: list[str], change_toogle_p: list[list[int]], objectif: str) -> int:
-    inital_toogle: list[str] = inital_toogle_p.copy()
-    change_toogle: list[list[int]] = change_toogle_p.copy()
-    print("plonger...")
-    print(f"{inital_toogle=}, {change_toogle=}, {objectif=}")
+@cache
+def plonger(inital_toogle_p: tuple[str, ...], change_toogle_p: tuple[tuple[int, ...], ...], actual_toogle: tuple[int, ...] | None,
+            objectif: str, verbose: bool = False) -> int | float:
+    global nb_appel
+    inital_toogle: tuple[str, ...] = inital_toogle_p
+    change_toogle: list[tuple[int, ...]] = list(change_toogle_p)
+    nb_appel += 1
+    verbose and print("plonger...")
+    verbose and print(f"{inital_toogle=}, {change_toogle=}, {actual_toogle=}, {objectif=}")
     if not change_toogle:
-        return 0
+        return float('inf')
 
-    if "".join(inital_toogle) == objectif:
-        return 1
+    if actual_toogle:
+        inital_toogle = toogle_switch(inital_toogle, tuple(actual_toogle))
 
-    inital_toogle = toogle_switch(inital_toogle, change_toogle.pop())
+        if "".join(inital_toogle) == objectif:
+            verbose and print("find !")
+            return 1
 
     result = list()
     for i in range(0, len(change_toogle)):
-        result.append(plonger(inital_toogle, change_toogle, objectif))
+        temp_ch_toogle = change_toogle.copy()
+        act_toogle = temp_ch_toogle[i]
+        temp_ch_toogle.remove(act_toogle)
+        act_toogle = tuple(act_toogle)
+        if actual_toogle:
+            plouf = 1 + plonger(inital_toogle, tuple(temp_ch_toogle), act_toogle, objectif, verbose)
+            if plouf > 2:
+                result.append(
+                    plouf)  # si aucun ne l'a resout directement, on aller prend le minimum (le meilleur) de toutes les solutions
+            else:
+                verbose and print("OPTI: best result (1) directly find")
+                return plouf
+        else:
+            result.append(plonger(inital_toogle, tuple(temp_ch_toogle), act_toogle, objectif, verbose))
 
     return min(result)
 
 
-with open("2025_day10_dataTEST", "r", encoding="utf-8") as f:
+summary = 0
+with open("2025_day10_data", "r", encoding="utf-8") as f:
     verbose = True
     verbose_vict = True
 
@@ -69,7 +88,7 @@ with open("2025_day10_dataTEST", "r", encoding="utf-8") as f:
 
         boutons_interessant = list()
         verbose and print(f" --- boutons_interessant")
-        debug_btn_int = True
+        debug_btn_int = False
         for one_grp_button in ligne[1:]:
             debug_btn_int and print(f"{one_grp_button=}")
             for one_swt in one_grp_button:
@@ -95,7 +114,7 @@ with open("2025_day10_dataTEST", "r", encoding="utf-8") as f:
         verbose and print(f"{boutons_interessant=}")
         verbose and print(f"{boutons_linked=}")
 
-        all_boutons: list[list[int]] = boutons_interessant + boutons_linked
+        all_boutons: tuple[tuple[int, ...], ...] = tuple(boutons_interessant) + tuple(boutons_linked)
         verbose and print(f"{all_boutons=}")
 
         # bruteforce
@@ -104,7 +123,10 @@ with open("2025_day10_dataTEST", "r", encoding="utf-8") as f:
         best_nb_change: int = 99999999999999
         nb_change: int = 0
 
-        print(f"{plonger(TOOGLE_EMPTY, all_boutons, switchs)=}")
+        result = plonger(tuple(TOOGLE_EMPTY), all_boutons, None, switchs, verbose=False)
+        print(f"{result=}")
+        summary += result
+        """
         for first in range(0, len(all_boutons)):
             first = all_boutons[first]
             best_nb_change = 1
@@ -128,3 +150,7 @@ with open("2025_day10_dataTEST", "r", encoding="utf-8") as f:
                     if nb_change < best_nb_change:
                         best_nb_change = nb_change
         print(f"{best_nb_change=}")
+        """
+
+print(f"{summary=}")
+print(f"{nb_appel=}")
