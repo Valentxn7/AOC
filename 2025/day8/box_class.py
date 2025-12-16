@@ -13,5 +13,8 @@ class box:
     def distance(self, other_box):
         return math.sqrt((self.x - other_box.x) ** 2 + (self.y - other_box.y) ** 2 + (self.z - other_box.z) ** 2)
 
+    def is_solitaire(self):
+        return self.junction is None or self.junction.taille() == 1
+
     def __repr__(self):
         return f"<box x={self.x}, y={self.y}, z={self.z}>"

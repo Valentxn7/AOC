@@ -37,12 +37,15 @@ def solve(input_file):
     all_distance.sort(key=lambda tup: tup[0])
     verbose and print(f"all_distance={all_distance}")
 
-    iteration = -1
+    initalized = False
+    box_1: box | None = None
+    box_2: box | None = None
     for distance, box_choisie, meilleur_pair in all_distance:
-        iteration += 1
-        if iteration == 1000:
-            break
-
+        verbose and print(f"* {distance=} {box_choisie=} {meilleur_pair=}")
+        if len(list_junction) == 1 and len(list_junction[0].box_list) == len(list_box):
+            verbose and print(f"finie")
+            return box_1.x * box_2.x
+        box_1, box_2 = box_choisie, meilleur_pair
         if box_choisie.junction or meilleur_pair.junction:
             if not meilleur_pair.junction:  # box1 en a une mais pas box2, on ajoute box2 dans Junct1
                 verbose and print(f"## add to existing junction {box_choisie.junction=}")
@@ -74,23 +77,6 @@ def solve(input_file):
             meilleur_pair.junction = new_junction
             list_junction.append(new_junction)
             verbose and print(f"## after creating {new_junction=}")
-
-    # trouver les plus grosse junction
-    total = 1
-    verbose and print(f"{list_junction=}")
-    for sum_i in range(0, 3):
-        verbose and print(f"add best junction n{sum_i}")
-        max_taille = 0
-        meilleur_junction: junction | None = None
-        for one_junction in list_junction:
-            if one_junction.taille() > max_taille:
-                max_taille = one_junction.taille()
-                meilleur_junction = one_junction
-        total *= max_taille
-        verbose and print(f"meilleur junction : {meilleur_junction=}")
-        list_junction.remove(meilleur_junction)
-
-    return total
 
 
 if __name__ == "__main__":
