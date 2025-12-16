@@ -94,5 +94,5 @@ def solve(input_file):
 
 
 if __name__ == "__main__":
-    result = solve("2025_day8_data")  # sys.argv[1]
+    result = solve(sys.argv[1])  #
     print(result)
