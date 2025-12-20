@@ -29,7 +29,6 @@ def plonger(provenance: str, verbose: bool = False) -> int | float:
     return sum_chemin
 
 def solve(input_file):
-    summary = 0
     with (open(input_file, "r", encoding="utf-8") as f):
         verbose = False
         verbose_vict = False
@@ -54,12 +53,10 @@ def solve(input_file):
 
         result = plonger(noeud_depart, verbose=verbose)
         return result
-        summary += result
 
-    verbose_vict and print(f"{summary=}")
     verbose_vict and print(f"{nb_appel=}")
 
 
 if __name__ == "__main__":
-    result = solve("2025_day11_data") # sys.argv[1]
+    result = solve(sys.argv[1]) # "2025_day11_data"
     print(result)
